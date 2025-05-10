@@ -1,5 +1,4 @@
-// Dashboard.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -7,8 +6,9 @@ const Dashboard = () => {
   const [year, setYear] = useState("");
   const [semester, setSemester] = useState("");
   const [section, setSection] = useState("");
-  const [facultyList, setFacultyList] = useState(["Dr. Smith", "Prof. Jane", "Mr. Raj"]);
-  const [subjectList, setSubjectList] = useState(["Mathematics", "Physics", "Chemistry", "Computer Science"]);
+  const [branch, setBranch] = useState("");
+  const [facultyList] = useState(["Dr. Smith", "Prof. Jane", "Mr. Raj"]);
+  const [subjectList] = useState(["Mathematics", "Physics", "Chemistry", "Computer Science"]);
   const [faculty, setFaculty] = useState("");
   const [subject, setSubject] = useState("");
   const [allocations, setAllocations] = useState([]);
@@ -28,30 +28,12 @@ const Dashboard = () => {
     setAllocations([...allocations, { faculty, subject }]);
   };
 
-  const handleAddFaculty = (name) => {
-    if (name && !facultyList.includes(name)) {
-      setFacultyList([...facultyList, name]);
-      alert("Faculty added!");
-    } else {
-      alert("Invalid or duplicate faculty name.");
-    }
-  };
-
-  const handleAddSubject = (name) => {
-    if (name && !subjectList.includes(name)) {
-      setSubjectList([...subjectList, name]);
-      alert("Subject added!");
-    } else {
-      alert("Invalid or duplicate subject name.");
-    }
-  };
-
   const handleGenerate = () => {
     console.log("Generate Timetable button clicked");
     navigate("/timetable");
   };
 
-  const showAllocationArea = year && semester && section;
+  const showAllocationArea = year && semester && section && branch;
 
   return (
     <div className="dashboard" style={styles.dashboard}>
@@ -72,6 +54,17 @@ const Dashboard = () => {
             <option value="">Select Semester</option>
             <option>Semester 1</option>
             <option>Semester 2</option>
+          </select>
+        </div>
+        <div style={styles.section}>
+          <label>Branch</label>
+          <select value={branch} onChange={(e) => setBranch(e.target.value)} style={styles.input}>
+            <option value="">Select Branch</option>
+            <option>Computer Science</option>
+            <option>Electronics</option>
+            <option>Mechanical</option>
+            <option>Civil</option>
+            <option>Information Technology</option>
           </select>
         </div>
         <div style={styles.section}>
@@ -107,24 +100,10 @@ const Dashboard = () => {
                 ))}
               </select>
             </div>
-
-            <div style={styles.section}>
-              <button onClick={handleAllocate} style={styles.button}>Allocate</button>
-            </div>
           </div>
 
-          <div style={styles.addControls}>
-            <div style={styles.section}>
-              <label>Add Faculty</label>
-              <input type="text" placeholder="e.g., Dr. Ramesh" id="newFaculty" style={styles.input} />
-              <button onClick={() => handleAddFaculty(document.getElementById("newFaculty").value)} style={styles.button}>Add Faculty</button>
-            </div>
-
-            <div style={styles.section}>
-              <label>Add Subject</label>
-              <input type="text" placeholder="e.g., AI & ML" id="newSubject" style={styles.input} />
-              <button onClick={() => handleAddSubject(document.getElementById("newSubject").value)} style={styles.button}>Add Subject</button>
-            </div>
+          <div style={styles.centerButton}>
+            <button onClick={handleAllocate} style={styles.button}>Allocate</button>
           </div>
 
           {allocations.length > 0 && (
@@ -166,14 +145,33 @@ const styles = {
     boxShadow: "0 0 10px rgba(0,0,0,0.1)"
   },
   heading: { textAlign: "center", marginBottom: "20px" },
-  filters: { display: "flex", justifyContent: "space-between", gap: "15px", marginBottom: "20px" },
-  allocation: { display: "flex", justifyContent: "space-between", gap: "15px", marginBottom: "20px" },
-  addControls: { display: "flex", justifyContent: "space-between", gap: "15px", marginBottom: "20px" },
+  filters: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: "15px",
+    marginBottom: "20px"
+  },
+  allocation: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "15px",
+    marginBottom: "20px"
+  },
   section: { flex: 1 },
-  input: { width: "100%", padding: "10px", borderRadius: "5px", fontSize: "16px" },
-  button: {
+  input: {
     width: "100%",
     padding: "10px",
+    borderRadius: "5px",
+    fontSize: "16px"
+  },
+  centerButton: {
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "20px"
+  },
+  button: {
+    padding: "10px 30px",
     backgroundColor: "#4CAF50",
     color: "white",
     fontWeight: "bold",
