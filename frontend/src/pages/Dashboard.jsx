@@ -47,6 +47,7 @@ const Dashboard = () => {
   };
 
   const handleGenerate = () => {
+    console.log("Generate Timetable button clicked");
     navigate("/timetable");
   };
 
